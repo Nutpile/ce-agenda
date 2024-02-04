@@ -7,3 +7,4 @@ src/gfx/*.8xv
 convimg.out
 .vscode
 icon.png
+autotest.json
