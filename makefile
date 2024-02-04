@@ -2,9 +2,9 @@
 # Makefile Options
 # ----------------------------
 
-NAME = PROGRAM
+NAME = AGENDA
 ICON = icon.png
-DESCRIPTION = "C Program by Nutpile"
+DESCRIPTION = "Agenda by Nutpile"
 COMPRESSED = NO
 
 CFLAGS = -Wall -Wextra -Oz
