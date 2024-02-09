@@ -51,8 +51,8 @@ void drawstatusbar(void)
 
 void filedecode(void)
 {
-    char date[17] = "dd/mm/yyyy hh:mm";
-    char msg[33] = "This is a test message, 32 chars";
+    char date[17] = "";
+    char msg[33] = "";
     uint8_t AVid = 0;
     AVid = ti_Open("AgendaAV", "r");
     if(AVid == 0){
@@ -60,13 +60,16 @@ void filedecode(void)
         exit(1);
     }
     ti_Rewind(AVid);
-    ti_Read(date, 17, 1, AVid);
-    ti_Read(msg, 33, 1, AVid);
+    gfx_SetColor(0);
+    for(int i = 30; i < 200; i+=30){
+        ti_Read(date, 17, 1, AVid);
+        ti_Read(msg, 33, 1, AVid);
+        gfx_PrintStringXY(date, 4, i);
+        gfx_PrintStringXY(msg, 4, i+10);
+        gfx_HorizLine_NoClip(0, i+20, 320);
+    }
     ti_Close(AVid);
     AVid = 0;
-    //temp code! 
-    gfx_PrintStringXY(date, 4, 40);
-    gfx_PrintStringXY(msg, 4, 50);
 }
 
 int main(void)
@@ -77,11 +80,21 @@ int main(void)
     AVid = ti_Open("AgendaAV", "w");
     ti_Write(&"09/09/2009 05:27", 17, 1, AVid);
     ti_Write(&"Hi if you see this msg it worked", 33, 1, AVid);
+    ti_Write(&"06/06/2012 12:12", 17, 1, AVid);
+    ti_Write(&"shorter string test", 33, 1, AVid);
     ti_Close(AVid);
     //end of temp code
     filedecode();
+    //draws bottom bar
+    gfx_SetColor(195);
+    gfx_FillRectangle_NoClip(0, 223, 320, 17);
+    gfx_SetColor(255);
+    gfx_Rectangle_NoClip(0, 224, 318, 15);
+    gfx_PrintStringXY("Add", 4, 228);
+    gfx_PrintStringXY("Exit", 288, 228);
+
     uint8_t barupdate = -1;
-    while(!os_GetCSC()){
+    while(os_GetCSC() != sk_Graph){
         if (barupdate != rtc_Minutes){
             drawstatusbar(); 
             barupdate = rtc_Minutes;
